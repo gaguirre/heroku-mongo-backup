@@ -85,13 +85,13 @@ if defined?(AWS)
 else
 
   begin
-    require 'aws/sdk'
+    require 'aws-sdk'
   rescue LoadError
-    # There is no 'aws/sdk' in Gemfile
+    # There is no 'aws-sdk' in Gemfile
   end
 
   if defined?(AWS)
-    # Using 'aws/sdk' gem as Amazon S3 interface
+    # Using 'aws-sdk' gem as Amazon S3 interface
 
     def HerokuMongoBackup::s3_connect(bucket, key, secret)
       s3 = AWS::S3.new(:access_key_id => key, :secret_access_key => secret)
@@ -170,7 +170,7 @@ if defined?(Fog)
 
 else
   logging = Logger.new(STDOUT)
-  logging.error "\n\nheroku-mongo-backup: Please include 's3', 'aws/s3', 'aws/sdk' or 'fog' gem in applications Gemfile for uploading backup to S3 bucket. (ignore this if using FTP)\n\n"
+  logging.error "\n\nheroku-mongo-backup: Please include 's3', 'aws/s3', 'aws-sdk' or 'fog' gem in applications Gemfile for uploading backup to S3 bucket. (ignore this if using FTP)\n\n"
 end
 
 
