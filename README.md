@@ -15,7 +15,7 @@
 
 Add gem to the ```Gemfile```: ```gem "heroku-mongo-backup"``` - if everything's okay ```rake -T``` command should show ```rake mongo:backup``` rake tasks.
 
-For S3 support **heroku-mongo-backup** requires ```s3``` or ```aws-s3``` or ```fog``` library. One of those should be in ```Gemfile```, if you don't care add ```fog``` it's seems to be the most advanced.
+For S3 support **heroku-mongo-backup** requires ```s3``` or ```aws-s3``` or ```aws-sdk``` or ```fog``` library. One of those should be in ```Gemfile```, if you don't care add ```fog``` it's seems to be the most advanced.
 
 Configure heroku scheduler to run ```mongo:backup``` rake task. Or if cron is used add backup task to ```/lib/tasks/cron.rake``` file:
 
@@ -66,6 +66,9 @@ For Rails 2 add this to your Rakefile to import rake tasks:
 5. [wolfpakz](https://github.com/wolfpakz "Dan Porter") - Rails2 support
 6. [solacreative](http://sola-la.com/creative "Taro Murao") - Max backups feature for aws/s3 and s3 gems
 7. [aarti](https://github.com/aarti "aarti") - minor fixes
+<!---
+8. [gaguirre - idea.me](https://github.com/gaguirre "Gonzalo Aguirre") - Added aws/sdk gem support
+-->
 
 
 

@@ -1,6 +1,6 @@
 begin
   require 's3'
-  
+
 rescue LoadError
     #
     # There is no 's3' gem in Gmefile
@@ -82,9 +82,41 @@ if defined?(AWS)
     (0..excess-1).each { |i| AWS::S3::S3Object.find(object_keys[i], bucket).delete } if excess > 0
   end
 
+else
+
+  begin
+    require 'aws/sdk'
+  rescue LoadError
+    # There is no 'aws/sdk' in Gemfile
+  end
+
+  if defined?(AWS)
+    # Using 'aws/sdk' gem as Amazon S3 interface
+
+    def HerokuMongoBackup::s3_connect(bucket, key, secret)
+      s3 = AWS::S3.new(:access_key_id => key, :secret_access_key => secret)
+
+      return s3.buckets[bucket]
+    end
+
+    def HerokuMongoBackup::s3_upload(bucket, filename)
+      file = open(filename)
+      bucket.objects["backups/#{filename}"].write(file)
+    end
+
+    def HerokuMongoBackup::s3_download(bucket, filename)
+      return bucket.objects["backups/#{filename}"].read
+    end
+
+    def HerokuMongoBackup::remove_old_backup_files(bucket, files_number_to_leave)
+      object_keys = bucket.objects.with_prefix("backups").collect(&:key).sort
+      excess = object_keys.count - files_number_to_leave
+      (0..excess-1).each { |i| bucket.objects[object_keys[i]].delete }
+    end
+
+  end
+
 end
-
-
 
 
 begin
@@ -115,7 +147,7 @@ if defined?(Fog)
     file = directory.files.create(
       :key    => "backups/#{filename}",
       :body   => open(filename)
-    )    
+    )
   end
 
   def HerokuMongoBackup::s3_download(directory, filename)
@@ -125,11 +157,11 @@ if defined?(Fog)
 
   def HerokuMongoBackup::remove_old_backup_files(directory, files_number_to_leave)
     total_backups = directory.files.all.size
-    
+
     if total_backups > files_number_to_leave
-      
+
       files_to_destroy = (0..total_backups-files_number_to_leave-1).collect{|i| directory.files.all[i] }
-      
+
       files_to_destroy.each do |f|
         f.destroy
       end
