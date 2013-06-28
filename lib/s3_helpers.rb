@@ -170,7 +170,7 @@ if defined?(Fog)
 
 else
   logging = Logger.new(STDOUT)
-  logging.error "\n\nheroku-mongo-backup: Please include 's3', 'aws/s3' or 'fog' gem in applications Gemfile for uploading backup to S3 bucket. (ignore this if using FTP)\n\n"
+  logging.error "\n\nheroku-mongo-backup: Please include 's3', 'aws/s3', 'aws/sdk' or 'fog' gem in applications Gemfile for uploading backup to S3 bucket. (ignore this if using FTP)\n\n"
 end
 
 
